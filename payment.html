@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout - Care Insurance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 600px;
+        }
+        .left-panel {
+            width: 40%;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 40px 30px;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.2;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+        }
+        .brand-name { font-size: 18px; font-weight: 600; color: #2c3e50; }
+        .amount-section { margin-top: 20px; }
+        .amount-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .amount-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .amount-value:hover { color: #007bff; }
+        .dropdown-icon { font-size: 16px; color: #6c757d; }
+        .secure-footer {
+            margin-top: auto;
+            padding-top: 30px;
+            border-top: 1px solid #e9ecef;
+        }
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #28a745;
+            font-weight: 500;
+        }
+        .secure-badge i { font-size: 16px; }
+        .transaction-id { font-size: 11px; color: #adb5bd; margin-top: 8px; }
+        .right-panel {
+            width: 60%;
+            padding: 30px 40px;
+            background: white;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f3f4;
+        }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover { color: #2c3e50; }
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            flex: 1;
+            text-align: center;
+            margin-left: -40px;
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #6c757d;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .user-menu:hover { background: #e9ecef; }
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #adb5bd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .payment-options { display: flex; flex-direction: column; gap: 12px; }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .payment-option:hover {
+            border-color: #007bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+        }
+        .payment-option.active {
+            border-color: #007bff;
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+        }
+        .payment-left { display: flex; align-items: center; gap: 16px; }
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 20px;
+        }
+        .qr-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .gpay-icon { background: white; border: 1px solid #e9ecef; }
+        .gpay-icon img { width: 24px; height: 24px; }
+        .payment-label { font-size: 16px; font-weight: 600; color: #2c3e50; }
+        .payment-subtitle { font-size: 12px; color: #6c757d; margin-top: 2px; }
+        .check-icon { color: #007bff; font-size: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .payment-option.active .check-icon { opacity: 1; }
+        .payment-details {
+            margin-top: 24px;
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .payment-details.show { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .qr-section { text-align: center; }
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            background: white;
+            margin: 0 auto 20px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .qr-placeholder {
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, #000 0, #000 10px, #fff 10px, #fff 20px),
+                        repeating-linear-gradient(90deg, #000 0, #000 10px, #fff 10px, #fff 20px);
+            background-size: 20px 20px;
+            border-radius: 4px;
+        }
+        .bank-details {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            text-align: left;
+        }
+        .bank-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .bank-label { color: #6c757d; }
+        .bank-value { font-weight: 600; color: #2c3e50; font-family: monospace; }
+        .gpay-button {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+        .gpay-button:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .note { font-size: 12px; color: #6c757d; margin-top: 12px; text-align: center; }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .left-panel, .right-panel { width: 100%; }
+            .left-panel { border-right: none; border-bottom: 1px solid #e9ecef; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="brand-header">
+                <div class="logo">care<br>HEALTH<br>INSURANCE</div>
+                <div class="brand-name">CareInsurance</div>
+            </div>
+            <div class="amount-section">
+                <div class="amount-label">Total Payable</div>
+                <div class="amount-value">
+                    <span>₹176997</span>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
+            </div>
+            <div class="secure-footer">
+                <div class="secure-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure Checkout</span>
+                    <i class="fas fa-check-circle" style="color: #28a745;"></i>
+                </div>
+                <div class="transaction-id">Transaction Id: 58477812</div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="header">
+                <a href="#" class="back-link">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>Back</span>
+                </a>
+                <h1 class="header-title">Checkout</h1>
+                <div class="user-menu">
+                    <i class="fas fa-user-circle"></i>
+                    <span>XXXXXXXX01</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="section-title">ALL PAYMENT OPTIONS</div>
+            <div class="payment-options">
+                <div class="payment-option" onclick="selectPayment('qr')">
+                    <div class="payment-left">
+                        <div class="payment-icon qr-icon"><i class="fas fa-qrcode"></i></div>
+                        <div>
+                            <div class="payment-label">Scan & Pay via QR</div>
+                            <div class="payment-subtitle">Any UPI app or Banking app</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle check-icon"></i>
+                </div>
+                <div class="payment-option" onclick="selectPayment('gpay')">
+                    <div class="payment-left">
+                        <div class="payment-icon gpay-icon">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="GPay">
+                        </div>
+                        <div>
+                            <div class="payment-label">Google Pay</div>
+                            <div class="payment-subtitle">Fast & secure payment</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-check-circle check-icon"></i>
+                </div>
+            </div>
+            <div id="qr-details" class="payment-details">
+                <div class="qr-section">
+                    <div class="qr-code"><div class="qr-placeholder"></div></div>
+                    <p style="font-size: 14px; color: #6c757d; margin-bottom: 16px;">Scan this QR code with any UPI app to pay</p>
+                    <div class="bank-details">
+                        <div class="bank-row"><span class="bank-label">Account Name:</span><span class="bank-value">YOUR NAME</span></div>
+                        <div class="bank-row"><span class="bank-label">Account Number:</span><span class="bank-value">1234567890</span></div>
+                        <div class="bank-row"><span class="bank-label">IFSC Code:</span><span class="bank-value">ABCD0123456</span></div>
+                        <div class="bank-row"><span class="bank-label">UPI ID:</span><span class="bank-value">yourname@upi</span></div>
+                    </div>
+                </div>
+            </div>
+            <div id="gpay-details" class="payment-details">
+                <p style="font-size: 14px; color: #6c757d; margin-bottom: 16px; text-align: center;">Click below to pay ₹176997 using Google Pay</p>
+                <button class="gpay-button" onclick="initiateGPay()">
+                    <span>Pay with</span>
+                    <span style="font-size: 18px; font-weight: 700;">G Pay</span>
+                </button>
+                <p class="note">You'll be redirected to Google Pay to complete the payment to:<br><strong>UPI: yourname@upi</strong></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function selectPayment(method) {
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelectorAll('.payment-details').forEach(detail => detail.classList.remove('show'));
+            event.currentTarget.classList.add('active');
+            if (method === 'qr') document.getElementById('qr-details').classList.add('show');
+            else if (method === 'gpay') document.getElementById('gpay-details').classList.add('show');
+        }
+        function initiateGPay() {
+            const upiId = 'yourname@upi';
+            const amount = '176997';
+            const name = 'CareInsurance';
+            const transactionId = '58477812';
+            const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&tr=${transactionId}&cu=INR`;
+            window.location.href = upiLink;
+            setTimeout(() => alert('If Google Pay didn\'t open, please scan the QR code or use UPI ID: ' + upiId), 1000);
+        }
+    </script>
+</body>
+</html>
